@@ -1,0 +1,71 @@
+
+    {% include 'header.html' %}
+    <body>
+
+        <!-- Page Header-->
+        <header class="masthead" style="background-image: url('{{ url_for('static', filename='assets/img/home-bg.jpg') }}')"
+        id="top">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h1>Frederick's Blog</h1>
+                            <span class="subheading">Get the latest gists</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content-->
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <!-- Post preview-->
+                    {% if current_user.id == 1 and logged_in%}
+                        {% for gist in feed: %}
+
+                            <div class="post-preview">
+                                <a href="{{ url_for('get_post', id=feed.index(gist)) }}">
+                                    <h2 class="post-title">{{ gist.title.title() }}</h2>
+                                    <h3 class="post-subtitle">{{ gist.subtitle }}</h3>
+                                </a>
+                                <p class="post-meta">
+                                    Posted by
+                                    <a href="#!">{{ gist.author.name.title() }}</a>
+                                    on {{ gist.date.split(" ")[0] }} {{ gist.date.split(" ")[1] }} {{ gist.date.split(" ")[2] }}
+                                    <a href="{{ url_for('delete', index=feed.index(gist)) }}">
+                                        ✖
+                                    </a>
+                                </p>
+                            </div>
+                        {% endfor %}
+                        <!-- Divider-->
+                        <hr class="my-4" />
+                        <!-- Pager-->
+                        <div class="d-flex justify-content-end mb-4"><a class="btn btn-primary text-uppercase"
+                                                                    href="{{ url_for('create_post') }}">Create Post →</a>
+                        </div>
+                    {% else: %}
+                        {% for gist in feed: %}
+                            <div class="post-preview">
+                                <a href="{{ url_for('get_post', id=feed.index(gist)) }}">
+                                    <h2 class="post-title">{{ gist.title.title() }}</h2>
+                                    <h3 class="post-subtitle">{{ gist.subtitle }}</h3>
+                                </a>
+                                <p class="post-meta">
+                                    Posted by
+                                    <a href="#!">{{ gist.author.name.title() }}</a>
+                                    on {{ gist.date.split(" ")[0] }} {{ gist.date.split(" ")[1] }} {{ gist.date.split(" ")[2] }}
+                                </p>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <!-- Footer-->
+            {% include 'footer.html' ignore missing %}
+
+    </body>
+

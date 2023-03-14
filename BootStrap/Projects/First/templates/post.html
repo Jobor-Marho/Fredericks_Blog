@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% include 'header.html' %}
+    {% import "bootstrap/wtf.html" as wtf %}
+    <body>
+
+        <!-- Page Header-->
+        <header class="masthead" style="background-image: url('{{ img_url }}')" id="top">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="post-heading">
+                            <h1>{{ title.title() }}</h1>
+                            <h2 class="subheading">{{ subtitle }}</h2>
+                            <span class="meta">
+                                Posted by
+                                <a href="#!">{{ author }}</a>
+                                on {{ date.split(" ")[0] }} {{ date.split(" ")[1] }} {{ date.split(" ")[2] }}.
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Post Content-->
+        <article class="mb-4">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <p>
+                            {{ body|safe}}
+
+<!--                            <a href="http://spaceipsum.com/">Space Ipsum</a>-->
+<!--                            &middot; Images by-->
+<!--                            <a href="https://www.flickr.com/photos/nasacommons/">NASA on The Commons</a>-->
+                        </p>
+
+                    </div>
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <p>
+                            {{ body|safe}}
+
+<!--                            <a href="http://spaceipsum.com/">Space Ipsum</a>-->
+<!--                            &middot; Images by-->
+<!--                            <a href="https://www.flickr.com/photos/nasacommons/">NASA on The Commons</a>-->
+                        </p>
+                        <hr>
+                    </div>
+                    {% if current_user.id == 1 and logged_in: %}
+                        <div class="d-flex justify-content-end mb-4">
+                            <a class="btn btn-primary text-uppercase" href="{{ url_for('edit', post_id=id) }}">
+                                Edit Post
+                            </a>
+                        </div>
+                    {% endif %}
+
+
+
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <hr>
+                        {{ wtf.quick_form(form, novalidate=True, button_map={"submit": "primary"})}}
+                        {{ ckeditor.load() }}
+
+                    </div>
+                    {% if comments != [] %}
+                        <div class="col-md-10 col-lg-8 col-xl-7">
+                            <br>
+                            <ul class="comments">
+                                <li>
+                                    {% for comment in comments: %}
+
+                                        <div class="avatar">
+
+                                            <img src="{{ comment.comment_author.email|gravatar }}" alt="avatar">
+                                            {{ comment.comment_text|safe }}
+                                            <span class="user">posted by <strong>{{ comment.comment_author.name }}</strong>
+                                            on the {{ comment.date.split('/')[0] }} of {{ comment.date.split('/')[1] }},
+                                            {{ comment.date.split('/')[2] }}
+                                            </span>
+                                        </div>
+
+                                    {% endfor %}
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+
+                    </div>
+                </div>
+            </div>
+        </article>
+        <!-- Footer-->
+        {% include 'footer.html' ignore missing %}
+
+    </body>
+</html>
