@@ -40,6 +40,4 @@ POSITION = {
     "0": "th"
 }
 
-g_mail = "imlearning862@gmail.com"
-yahoo_mail = "imlearning268@yahoo.com"
-gmail_password = "wkthkankpzblxvpq"
+

@@ -9,8 +9,11 @@ from flask_login import UserMixin, login_user, LoginManager, login_required, cur
 from werkzeug.security import generate_password_hash, check_password_hash
 from forms import CreatePostForm, RegisterForm, LoginForm, CommentForm
 from flask_gravatar import Gravatar
+from dotenv.main import load_dotenv
+import os
 
 
+load_dotenv()
 date = datetime.now()
 current_day = date.day
 current_month = MONTHS[f"{date.month}"]
@@ -19,7 +22,7 @@ logged_in = False
 error = None
 
 my_app = Flask(__name__)
-my_app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
+my_app.config['SECRET_KEY'] = os.environ['SECRET_KEY']
 
 ckeditor = CKEditor(my_app)
 Bootstrap(my_app)
@@ -117,9 +120,12 @@ def get_contact():
         message = request.form['Message']
         msg = f"Name: {name}\nEmail: {email}\nPhone Number: {phone}\nMessage: {message}"
         notify = NotificationManager(msg=msg, recipient="imlearning862@gmail.com", subject="Blog Message")
-        success_msg = "Successfully, sent your message."
-        return render_template("contact.html", day=current_day, month=current_month, year=current_year, success=True,
-                               success_msg=success_msg, logged_in=logged_in)
+        if notify:
+            success_msg = "Successfully, sent your message."
+            return render_template("contact.html", day=current_day, month=current_month, year=current_year, success=True,
+                                   success_msg=success_msg, logged_in=logged_in)
+        else:
+            return render_template('error.html')
     return render_template("contact.html", day=current_day, month=current_month,
                            year=current_year, success=False, logged_in=logged_in)
 

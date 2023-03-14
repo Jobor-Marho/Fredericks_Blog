@@ -1,9 +1,10 @@
 from twilio.rest import Client
-from formats import g_mail, gmail_password, yahoo_mail
 import smtplib
+from dotenv.main import load_dotenv
 import os
 
 
+load_dotenv()
 class NotificationManager:
     def __init__(self, msg: str, recipient: str, subject: str):
         self.message_data = msg
@@ -24,10 +25,14 @@ class NotificationManager:
         )
 
     def send_email(self, message):
-        with smtplib.SMTP_SSL("smtp.gmail.com") as connection:
-            connection.login(user=g_mail, password=gmail_password)
-            connection.sendmail(from_addr=g_mail,
-                                to_addrs=self.recipient,
-                                msg=f"Subject:Hello {self.subject}\n\n{message}")
-
+        try:
+            with smtplib.SMTP_SSL("smtp.gmail.com") as connection:
+                connection.login(user=os.environ['G_MAIL'], password=os.environ['GMAIL_PASSWORD'])
+                connection.sendmail(from_addr=os.environ['G_MAIL'],
+                                    to_addrs=self.recipient,
+                                    msg=f"Subject:Hello {self.subject}\n\n{message}")
+        except smtplib.SMTPServerDisconnected:
+            return False
+        else:
+            return True
 
