@@ -28,7 +28,8 @@ ckeditor = CKEditor(my_app)
 Bootstrap(my_app)
 login_manager = LoginManager(my_app)
 
-my_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
+my_app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
+# my_app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///posts.db'
 my_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(my_app)
 gravatar = Gravatar(my_app, size=50, rating='g', default='retro', force_default=False, force_lower=False,
