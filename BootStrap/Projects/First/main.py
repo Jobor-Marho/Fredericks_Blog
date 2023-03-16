@@ -168,6 +168,8 @@ def edit(post_id):
 @my_app.route('/login', methods=['POST', 'GET'])
 def login():
     global logged_in, error
+    if error == "Sorry that email has already been registered. Login Instead.":
+        error = None
     form = LoginForm()
     if request.method == 'POST':
         email = form.email.data
@@ -274,7 +276,7 @@ def register():
             else:
                 return redirect('/')
         else:
-            error = 'Sorry that email has already been registered. Login Instead'
+            error = 'Sorry that email has already been registered. Login Instead.'
             return redirect('login')
     return render_template("register.html", form=form, error=error)
 
